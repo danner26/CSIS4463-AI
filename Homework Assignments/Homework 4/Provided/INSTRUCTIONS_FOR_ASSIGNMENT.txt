@@ -1,0 +1,93 @@
+In this assignment, you will recreate a variation of an example from the textbook.
+Specifically, the example showing how the number of expanded states varies with
+the difficulty of the 8-puzzle (length of optimal solution) and comparing the 
+performance of multiple search algorithms.
+
+Write a Java program that does the following:
+
+1) Generates 100 random instances of the 8-puzzle that have an optimal solution
+   of length 2 (see Examples.java and the documentation of the SlidingTilePuzzle
+   class to see how to generate 1 such instance).
+   
+2) Solve each of those 100 random instances with each of the following search algorithms:
+   Uniform Cost Search (UCS)
+   A* with misplaced tiles heuristic
+   A* with manhattan distance heuristic
+   Iterative Deepening
+   IDA* with misplaced tiles heuristic
+   IDA* with manhattan distance heuristic
+   
+3) While doing #2 above, for each search algorithm, compute the average number of expanded
+   states (averaged across the 100 random instances), the average number of generated states,
+   and the average of the max states in memory.  See the documentation for the PuzzleSolution
+   class and for the SlidingTilePuzzleSolver class, and the examples in Examples.java.
+   
+4) Steps 1, 2, and 3 should be repeated for optimal path lengths of 4, 6, 8, 10, and 12.
+
+5) Have your program generate and output tables containing the average data.  See toward the
+   bottom of this file for an example of what the output should look like.
+   
+6) Answer the following questions:
+
+6A) Describe in words the relative pattern of number of expanded states for UCS and A* 
+    with the two different heuristics.
+
+6B)	Why do we find that pattern?
+
+6C) Describe in words the relative pattern of number of expanded states for Iterative Deepening 
+    and IDA* with the two different heuristics.
+	
+6D) Why do we find that pattern? And how does that pattern compare to what you saw in 6A and 6B?  
+
+6E) Describe the memory usage (max states in memory) that you observed for UCS, and the
+    two variations of A*.
+	
+6F) Describe the relative memory usage (max states in memory) that you observed for Iterative Deepening 
+    and IDA* with the two different heuristics.
+	
+6G) Explain the memory usage that you observed for the three iterative deepening algorithms (IDA* and ID) 
+    versus the others (UCS and A*).
+	
+7) Upload and submit the following files:
+7a) The java sourcecode for the program you wrote to generate the data (the .java file).
+7b) A text file containing the output of that program.
+7c) A file with your answers to the questions from step 6.
+
+
+
+Example Output: Here is an example of the expected output of your program.
+Note that the numbers you get will be different than mine (program is generating
+random start states, so your program will see different start states than mine did).
+However, the numbers should be somewhat similar, so if yours are rather different
+than what is found below, then you might have a bug in how you are computing the 
+averages.  You're not required to output the data to two decimal places as below,
+but may be easier to read if you do (e.g., you can use System.out.printf to
+accomplish that).  In my tables A*1 and IDA*1 use misplaced tiles.  A*2 and IDA*2
+use manhattan distance.
+
+Num States Expanded
+ L	     UCS	     A*1	     A*2	      ID	   IDA*1	   IDA*2
+ 2	    6.11	    2.00	    2.00	    9.58	    4.00	    4.00
+ 4	   22.05	    4.05	    4.00	   43.83	    8.01	    8.00
+ 6	   75.72	    8.22	    6.84	  182.44	   14.74	   12.46
+ 8	  208.92	   16.14	   10.71	  552.64	   27.95	   18.12
+10	  599.46	   35.97	   16.66	 1673.28	   61.42	   26.67
+12	 1609.50	   91.47	   32.68	 5203.40	  180.34	   52.41
+
+Num States Generated
+ L	     UCS	     A*1	     A*2	      ID	   IDA*1	   IDA*2
+ 2	   18.30	    7.08	    7.08	   29.12	   13.24	   13.24
+ 4	   61.86	   12.89	   12.74	  122.99	   21.81	   21.78
+ 6	  208.40	   24.87	   20.67	  500.42	   42.56	   36.10
+ 8	  574.08	   47.09	   31.45	 1511.27	   77.63	   49.36
+10	 1619.60	  101.23	   47.32	 4565.64	  168.43	   71.45
+12	 4371.80	  252.59	   91.12	14198.10	  494.96	  142.79
+
+Max States in Memory
+ L	     UCS	     A*1	     A*2	      ID	   IDA*1	   IDA*2
+ 2	   13.19	    6.08	    6.08	    3.00	    3.00	    3.00
+ 4	   40.81	    9.84	    9.74	    5.00	    5.00	    5.00
+ 6	  130.48	   17.65	   14.80	    7.00	    7.00	    7.00
+ 8	  349.91	   31.80	   21.62	    9.00	    9.00	    9.00
+10	  962.62	   65.70	   31.44	   11.00	   11.00	   11.00
+12	 2587.33	  158.06	   58.84	   13.00	   13.00	   13.00
