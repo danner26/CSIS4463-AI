@@ -26,7 +26,7 @@ import java.util.ArrayList;
  *
  * After completing the solver method, write code to demonstrate that it works in the Homework5Main class.
  *
- * @author Your Name Goes here.
+ * @author Sam Isidoro and Daniel Anner
  *
  */
 public class Homework5 {
