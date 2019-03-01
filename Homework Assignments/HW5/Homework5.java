@@ -1,8 +1,6 @@
 import csis4463.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.lang.Math;
 
 /**
  * For this assignment, you will need the puzzle.jar file and its documentation (docs.zip) 
@@ -41,26 +39,24 @@ public class Homework5 {
 	 */
 	public static ArrayList<SlidingTilePuzzle> solver(SlidingTilePuzzle puzzle, Heuristic h) {
 		//init the list/map/heaps for our algorithm
-		ArrayList<SlidingTilePuzzle> solutionPath = new ArrayList<SlidingTilePuzzle>(); //hopefully our shortest path to the solution
-		MinHeapPQ<SlidingTilePuzzle> evalStates = new MinHeapPQ<SlidingTilePuzzle>(); //states to still evaluate
-
+		MinHeapPQ<SlidingTilePuzzle> priorityQueue = new MinHeapPQ<SlidingTilePuzzle>(); //states to still evaluate
 		HashMap<SlidingTilePuzzle, Integer> exploredStates = new HashMap<SlidingTilePuzzle, Integer>(); //already evaluated states
-		HashMap<SlidingTilePuzzle, SlidingTilePuzzle> back = new HashMap<SlidingTilePuzzle, SlidingTilePuzzle>(); //back pointers
+		HashMap<SlidingTilePuzzle, SlidingTilePuzzle> bps = new HashMap<SlidingTilePuzzle, SlidingTilePuzzle>(); //back pointers
+		ArrayList<SlidingTilePuzzle> solutionPath = new ArrayList<SlidingTilePuzzle>(); //hopefully our shortest path to the solution
 		
 		//@Sam, I keep thinking to use add, but in the docs you'll see we need to use offer
-		evalStates.offer(puzzle, h.h(puzzle));
+		priorityQueue.offer(puzzle, h.h(puzzle));
 		
-		while (!evalStates.isEmpty()) {
-			int peekPriority = evalStates.peekPriority(); //according to the docs, "returns the priority value of the top of the MinHeapPQ"
+		while (!priorityQueue.isEmpty()) {
+			int peekPriority = priorityQueue.peekPriority(); //according to the docs, "returns the priority value of the top of the MinHeapPQ"
 
-			SlidingTilePuzzle evalState = evalStates.poll(); //get the first state to eval, and remove it from the queue
-			
+			SlidingTilePuzzle evalState = priorityQueue.poll(); //get the first state to eval, and remove it from the queue
 			if(evalState.isGoalState()) { //if we are at the goal, then setup data to be returned in the arraylist
 				SlidingTilePuzzle solution = evalState;
 				
-				while (back.get(solution) != null) { //check if the state is in the back pointer map and iterate
+				while (bps.get(solution) != null) { //check if the state is in the back pointer map and iterate
 					solutionPath.add(0, solution); //add solution to the beginning
-					solution = back.get(solution); //get the back pointer
+					solution = bps.get(solution); //get the back pointer
 				}
 				return solutionPath; //return the array list
 			} else { //not at the goal, put data in the exploredStates map
@@ -68,7 +64,7 @@ public class Homework5 {
 				peekPriority = (peekPriority - h.h(evalState) ); //eval and set peekPriority to new state (not sure if the +1 is needed)
 				
 				for (SlidingTilePuzzle puzzle2 : evalState.getSuccessors()) { //iterate through all successors (use a puzzle holder, puzzle2)
-					int cost = peekPriority + h.h(puzzle2); //cost is peekPriority and heuristic cost	
+					int cost = peekPriority + h.h(puzzle2); //cost is peekPriority and heuristic cost
 					
 					/*
 					 * check for the following condition to be true:
@@ -76,12 +72,12 @@ public class Homework5 {
 					 * make sure the explored states DO NOT contain the puzzle2 instance
 					 */
 					if(!exploredStates.containsKey(puzzle2) || cost < exploredStates.get(puzzle2)) { //why cant I order this in the reverse direction??
-						evalStates.offer(puzzle2, cost); //again its offer not add.. 
-						back.put(puzzle2, evalState); //set the back pointer 
+						priorityQueue.offer(puzzle2, cost); //again its offer not add.. 
+						bps.put(puzzle2, evalState); //set the back pointer 
 					}
 				}
 			}
-		} 
+		}
 		return null; //returns null if the puzzle is not solvable
 	}
 }

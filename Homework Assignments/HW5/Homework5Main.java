@@ -11,12 +11,7 @@ public class Homework5Main {
 	
 	public static void main(String[] args) {
 		// write code here to demonstrate that your 8 puzzle solver works.
-		
-		ArrayList<SlidingTilePuzzle> solution = null; //init the solution to null for the while loop
-		/* Loop until we find a solvable Sliding Tile Puzzle - This avoids us getting an unsolvable null error */
-		while(solution == null) {
-			solution = Homework5.solver(new SlidingTilePuzzle(3, 3), new ManhattanDistance());
-		}
+		ArrayList<SlidingTilePuzzle> solution = Homework5.solver(new SlidingTilePuzzle(3,3,31), new ManhattanDistance());
 		
 		System.out.println(solution.get(solution.size()-1));
 	}
