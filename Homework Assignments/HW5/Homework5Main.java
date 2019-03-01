@@ -18,11 +18,12 @@ public class Homework5Main {
 		System.out.println(puzzle.toString());
 		
 		System.out.println("Iterating through the path");
-		for (int i = 1; i < solution.size(); i++) {
+		for (int i = 1; i < solution.size()-1; i++) {
 			System.out.println("Path " + i);
 			System.out.println(solution.get(i));
 			System.out.println();
 		}
+		System.out.println("Final solution");
 		System.out.println(solution.get(solution.size()-1));
 	}
 }
