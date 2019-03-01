@@ -27,7 +27,7 @@ import java.util.HashMap;
  *
  * After completing the solver method, write code to demonstrate that it works in the Homework5Main class.
  *
- * @author Sam Isidoro and Daniel Anner
+ * @author Daniel Anner and Sam ISidoro
  *
  */
 public class Homework5 {
@@ -44,9 +44,10 @@ public class Homework5 {
 		HashMap<SlidingTilePuzzle, SlidingTilePuzzle> bps = new HashMap<SlidingTilePuzzle, SlidingTilePuzzle>(); //back pointers
 		ArrayList<SlidingTilePuzzle> solutionPath = new ArrayList<SlidingTilePuzzle>(); //hopefully our shortest path to the solution
 		
-		//@Sam, I keep thinking to use add, but in the docs you'll see we need to use offer
+		//Offer ensures that identical elements are not put into the queue
 		priorityQueue.offer(puzzle, h.h(puzzle));
 		
+		//Loops through the queue to arrange the queue by priority 
 		while (!priorityQueue.isEmpty()) {
 			int peekPriority = priorityQueue.peekPriority(); //according to the docs, "returns the priority value of the top of the MinHeapPQ"
 
