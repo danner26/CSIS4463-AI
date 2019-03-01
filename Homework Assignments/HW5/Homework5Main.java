@@ -11,8 +11,18 @@ public class Homework5Main {
 	
 	public static void main(String[] args) {
 		// write code here to demonstrate that your 8 puzzle solver works.
-		ArrayList<SlidingTilePuzzle> solution = Homework5.solver(new SlidingTilePuzzle(3,3,31), new ManhattanDistance());
+		SlidingTilePuzzle puzzle = new SlidingTilePuzzle(3,3,31);
+		ArrayList<SlidingTilePuzzle> solution = Homework5.solver(puzzle, new ManhattanDistance());
 		
+		System.out.println("Initial Puzzle");
+		System.out.println(puzzle.toString());
+		
+		System.out.println("Iterating through the path");
+		for (int i = 1; i < solution.size(); i++) {
+			System.out.println("Path " + i);
+			System.out.println(solution.get(i));
+			System.out.println();
+		}
 		System.out.println(solution.get(solution.size()-1));
 	}
 }
