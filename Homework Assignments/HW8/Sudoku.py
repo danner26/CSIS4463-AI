@@ -83,8 +83,8 @@ def solvePuzzle(puzzle):
 
 def printPuzzle(solvedPuzzle):
   print("+---+---+---+---+---+---+---+---+---+")
-  for i, row in enumerate(solvedPuzzle):
-      print(("|" + " {}   {}   {} |"*3).format(*[x if x != 0 else " " for x in row]))
+  for i, r in enumerate(solvedPuzzle):
+      print(("|" + " {}   {}   {} |"*3).format(*[x if x != 0 else " " for x in r]))
       if i == 8:
           print("+---+---+---+---+---+---+---+---+---+") # end of sudoku table
       elif i % 3 == 2:
