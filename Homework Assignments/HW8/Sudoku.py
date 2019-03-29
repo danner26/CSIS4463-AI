@@ -1,108 +1,105 @@
-class Sudoku:
+###
+### @author Daniel @. Anner and Sam Isidoro
+###
+import os
+from pathlib import Path
 
-    #We have to get the text file to be read like this. No whitespace or comma/quotes.
-    puzzle = '040000179002008054006005008080070910050090030019060040300400700570100200928000060'
+class Puzzle:
+  _puzzle = ''
 
-# Reads in the file and prints line by line
-##    def readFile():
-##       # file = open("s01a.txt","r")
-##        #f1 = file.readlines()
-##       # file = " ".join(file.split())
-##        #print(file)
-##
-##
-##        with open('s01a.txt') as f:
-##            mylist = [line.rstrip('\n') for line in f]
-##            mylist = [item.replace(",", "") for item in mylist]
-##            print(mylist)
-##            f1 = mylist.readlines()
-##            file = open('testfile.txt','w+')
-##            file.write(f1) 
-## 
-##            file.close() 
-            
-        
-    # Creates the grid 
-    def createGrid(A, B):
+  def __init__(self, data):
+    self._puzzle = self.createPuzzle(data) # so you can just call Puzzle
 
-        return [a+b for a in A for b in B]
-        digits   = '123456789'
-        rows     = 'ABCDEFGHI'
-        columns     = digits
-        squares  = createGrid(rows, columns)
-        unitlist = ([createGrid(rows, c) for c in columns] +
-                [createGrid(r, columns) for r in rows] +
-                [createGrid(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')])
-        units = dict((s, [u for u in unitlist if s in u]) 
-                 for s in squares)
-        peers = dict((s, set(sum(units[s],[]))-set([s]))
-                 for s in squares)
+  def createPuzzle(self, file):
+    file_name = file + '.txt' # Append .txt to the file name
+    filePuzzle = Path('./Inputs/' + file_name).read_text() # Read the text from the file we select
+    filePuzzle = filePuzzle.replace('\n', ' ') # replace new lines with a space
+    filePuzzle = filePuzzle.split(' ') # split all numbers into an array using space as the delimiter
+    filePuzzle = [i for i in filePuzzle if i] # this removes and values that are empty
 
-    
-    # Creates a dict of values or returns false if it can't
-    def parseGrid(puzzle):
-        
-        values = dict((s, digits) for s in squares)
-        for s,d in gridValues(puzzle).items():
-            if d in digits and not assignValues(values, s, d):
-                return False ## (Fail if we can't assign d to square s.)
-        return values
-    
+    puzzleMatrix = [[0]*9 for i in range(9)] # init an empty 9x9 2d matix filled with 0's
+    r = 0 # row placeholder
+    c = 0 # column placeholder
+    for val in filePuzzle: # loop through the entier list of values
+      if (c == 9): # if we are on the next value, aka the 9th value (0-8 is a row)
+        c=0 # reset to 0
+        r+=1 # add 1 to the row
+        puzzleMatrix[r][c] = int(val) # set the value regardless of 0 or different
+        c+=1 # increment the column
+      else:
+        puzzleMatrix[r][c] = int(val) # set the value regardless of 0 or different
+        c+=1 # increment the column
 
-    # Converts grid to a hashmap
-    def gridValues(puzzle):
-        
-        chars = [c for c in puzzle if c in digits or c in '0.']
-        assert len(chars) == 81
-        return dict(zip(squares, chars))
+    return puzzleMatrix # return the matric to be assigned
 
-
-    # Assigns values to proper spots and returns false if it can't
-    def assignValues(values, s, d):
-
-        other_values = values[s].replace(d, '')
-        if all(eliminateSpots(values, s, d2) for d2 in other_values):
-            return values
-        else:
+  def checkPuzzle(puzzle):
+    for row in range(0,9): # iterate through each row
+        for col in range(0,9): # iterate through each column
+          if puzzle[row][col]==0: # if the value is not set, we are not done
             return False
+    return True # Goal state!!
 
-        
-    # Propagation step. Eliminates a position once it can only be 1 value and assigns it and returns false if it can't
-    def eliminateSpots(values, s, d):
+def solvePuzzle(puzzle):
+  for i in range(0,81):
+    r=i//9 # floor of i divided by 9
+    c=i%9 # need to make sure we are not on an overflow
+    if puzzle[r][c]==0:
+      for value in range (1,10):
+        if not(value in puzzle[r]): # ensure value isnt already in the row
+          # ensure value isnt already used in the column
+          if not value in (puzzle[0][c],puzzle[1][c],puzzle[2][c],puzzle[3][c],puzzle[4][c],puzzle[5][c],puzzle[6][c],puzzle[7][c],puzzle[8][c]):
+            box=[]
+            if r<3: # first row set (row 1-3)
+              if c<3: # first col set (col 1-3)
+                box=[puzzle[i][0:3] for i in range(0,3)]
+              elif c<6: # second col set (col 4-6)
+                box=[puzzle[i][3:6] for i in range(0,3)]
+              else: # third col set (col 7-9)
+                box=[puzzle[i][6:9] for i in range(0,3)]
+            elif r<6: # second box (row 4-6)
+              if c<3: # first col set (col 1-3)
+                box=[puzzle[i][0:3] for i in range(3,6)]
+              elif c<6: # second col set (col 4-6)
+                box=[puzzle[i][3:6] for i in range(3,6)]
+              else: # third col set (col 7-9)
+                box=[puzzle[i][6:9] for i in range(3,6)]
+            else:
+              if c<3: # first col set (col 1-3)
+                box=[puzzle[i][0:3] for i in range(6,9)]
+              elif c<6: # second col set (col 4-6)
+                box=[puzzle[i][3:6] for i in range(6,9)]
+              else: # third col set (col 7-9)
+                box=[puzzle[i][6:9] for i in range(6,9)]
+            #Check that this value has not already be used on this 3x3 box
+            if not value in (box[0] + box[1] + box[2]): # ensure value isnt already in the box
+              puzzle[r][c]=value # set value
+              if Puzzle.checkPuzzle(puzzle): # check if its complete
+                return True
+              else:
+                if solvePuzzle(puzzle): # rerun
+                  return puzzle
+      break # break if we reach the end and start next interation
+  puzzle[r][c]=0 # set back to 0 and back track
 
-        if d not in values[s]:
-            return values 
-        values[s] = values[s].replace(d,'')
-        if len(values[s]) == 0:
-            return False 
-        elif len(values[s]) == 1:
-            d2 = values[s]
-            if not all(eliminateSpots(values, s2, d2) for s2 in peers[s]):
-                return False
-        for u in units[s]:
-            dplaces = [s for s in u if d in values[s]]
-            if len(dplaces) == 0:
-                return False
-            elif len(dplaces) == 1:
-                if not assignValues(values, dplaces[0], d):
-                    return False
-        return values
+def printPuzzle(solvedPuzzle):
+  print("+---+---+---+---+---+---+---+---+---+")
+  for i, row in enumerate(solvedPuzzle):
+      print(("|" + " {}   {}   {} |"*3).format(*[x if x != 0 else " " for x in row]))
+      if i == 8:
+          print("+---+---+---+---+---+---+---+---+---+") # end of sudoku table
+      elif i % 3 == 2:
+          print("|" + "---+---+---+---+---+---+---+---+" + "---|") # print middle rows on the lines of the boxes
+      else:
+          print("|" + "   +   +   +   +   +   +   +   +" + "   |") # print inner rows in between boxes
 
+if __name__ == "__main__":
+  toSolve = input("What is the name of the file to solve? (do not include .txt)\n")
 
-    # Uses dfs and propagtion 
-    def searchSpots(values):
-        if values is False:
-            return False 
-        if all(len(values[s]) == 1 for s in squares): 
-            return values 
-        n,s = min((len(values[s]), s) for s in squares if len(values[s]) > 1)
-        return some(searchSpots(assignValues(values.copy(), s, d)) 
-                    for d in values[s])
+  print("Puzzle before solution is derived")
+  puzzleToSolve = Puzzle(toSolve)
+  printPuzzle(puzzleToSolve._puzzle)
 
-    # Solves the puzzle
-    def solution(puzzle):
-        return searchSpots(parseGrid(puzzle))
-
-
-        
-
+  print()
+  print("Puzzle after solution is derived")
+  solved = solvePuzzle(puzzleToSolve._puzzle)
+  printPuzzle(solved)
