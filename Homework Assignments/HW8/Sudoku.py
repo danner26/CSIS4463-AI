@@ -1,7 +1,7 @@
 ###
 ### @author Daniel @. Anner and Sam Isidoro
 ###
-import sys
+import sys, os
 from pathlib import Path
 
 class Puzzle:
@@ -11,8 +11,14 @@ class Puzzle:
     self._puzzle = self.createPuzzle(data) # so you can just call Puzzle
 
   def createPuzzle(self, file):
-    file_name = file + '.txt' # Append .txt to the file name
-    filePuzzle = Path('./Inputs/' + file_name).read_text() # Read the text from the file we select
+    file_path = './Inputs/' + file + '.txt' # file path placeholder
+
+    while not os.path.exists(file_path): # check if the file exists
+      print("It seems your input isnt a valid file..") # let the user know the file doesnt exist
+      file = input("What is the name of the file to solve? (do not include .txt)\n") # ask for a new file name
+      file_path = './Inputs/' + file + '.txt' # reassign the variable
+
+    filePuzzle = Path(file_path).read_text() # Read the text from the file we select
     filePuzzle = filePuzzle.replace('\n', ' ') # replace new lines with a space
     filePuzzle = filePuzzle.split(' ') # split all numbers into an array using space as the delimiter
     filePuzzle = [i for i in filePuzzle if i] # this removes and values that are empty
@@ -93,22 +99,23 @@ def printPuzzle(solvedPuzzle):
           print("|" + "   +   +   +   +   +   +   +   +" + "   |") # print inner rows in between boxes
 
 if __name__ == "__main__":
-  if (sys.argv[1] == '-h'):
-    print ('Sudoku.py')
-    print ('This will run the program and ask for a File Name\n')
-    print ('Sudoku.py <File Name>')
-    print ('This will run the program with the specified file\n*** Do not include the .txt')
-    sys.exit()
-  elif (sys.argv[1:]):
-    toSolve = sys.argv[1]
-  else:
-    toSolve = input("What is the name of the file to solve? (do not include .txt)\n")
+  if len(sys.argv) == 1:
+    toSolve = input("What is the name of the file to solve? (do not include .txt)\n") # if no arguments, ask for file name
+  for arg in sys.argv:
+    if arg == '-h':
+      print ('Sudoku.py')
+      print ('This will run the program and ask for a File Name\n')
+      print ('Sudoku.py <File Name>')
+      print ('This will run the program with the specified file\n*** Do not include the .txt')
+      sys.exit() # end the program
+    else:
+      toSolve = sys.argv[1]
+  puzzleToSolve = Puzzle(toSolve) # create the puzzle and parse the data into a Puzzle object (matrix)
 
   print("Puzzle before solution is derived")
-  puzzleToSolve = Puzzle(toSolve)
-  printPuzzle(puzzleToSolve._puzzle)
+  printPuzzle(puzzleToSolve._puzzle) # print the puzzle prior to solving
 
-  print()
+  print() # extra spacer
   print("Puzzle after solution is derived")
-  solved = solvePuzzle(puzzleToSolve._puzzle)
-  printPuzzle(solved)
+  solved = solvePuzzle(puzzleToSolve._puzzle) # solve the puzzle using our algorithm
+  printPuzzle(solved) # print the solution puzzle
