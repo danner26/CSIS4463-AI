@@ -1,7 +1,7 @@
 ###
 ### @author Daniel @. Anner and Sam Isidoro
 ###
-import os
+import sys
 from pathlib import Path
 
 class Puzzle:
@@ -93,7 +93,16 @@ def printPuzzle(solvedPuzzle):
           print("|" + "   +   +   +   +   +   +   +   +" + "   |") # print inner rows in between boxes
 
 if __name__ == "__main__":
-  toSolve = input("What is the name of the file to solve? (do not include .txt)\n")
+  if (sys.argv[1] == '-h'):
+    print ('Sudoku.py')
+    print ('This will run the program and ask for a File Name\n')
+    print ('Sudoku.py <File Name>')
+    print ('This will run the program with the specified file\n*** Do not include the .txt')
+    sys.exit()
+  elif (sys.argv[1:]):
+    toSolve = sys.argv[1]
+  else:
+    toSolve = input("What is the name of the file to solve? (do not include .txt)\n")
 
   print("Puzzle before solution is derived")
   puzzleToSolve = Puzzle(toSolve)
