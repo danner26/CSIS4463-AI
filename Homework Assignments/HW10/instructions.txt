@@ -1,0 +1,47 @@
+You are allowed to work as a team of up to 3 students, but can choose to work alone or in pairs, if you prefer.
+
+Implement any form of local search, genetic algorithm, or other metaheuristic for the Traveling Salesperson problem.  You are allowed to use either Java or Python 3.
+
+Instances:
+You can find many instances of the TSP at this site: http://www.math.uwaterloo.ca/tsp/data/.  Some of them are quite difficult (with thousands of cities), so stick to the smaller ones (a few hundred cities or less).  For example, in the "National TSP Collection," Djibouti has 38 cities so that might be a good one to test with at first.  Other smaller instances in that same set include Qatar (194 cities), and Western Sahara (29 cities). 
+
+On that page, the link beneath each problem that says "Data" is to a file that has an extension of .tsp.  E.g., Djibouti's file is dj38.tsp.  Take a look at that one to see how the data is organized.  Your program will need to be able to read in the data from the file.  DIMENSION tells you the number of cities.  The list of cities with locations begins right after NODE_COORD_SECTION, and consists in one city per line.  Each city has 3 things listed, an id (as an integer), and then 2 double values corresponding to x and y coordinates (the city's location).
+
+The distance function between two cities is the Euclidean distance rounded to the nearest integer.  So, if city 1 is at (x1, y1), and city 2 is at (x2, y2), the distance between them can be computed (in Java syntax) as: 
+
+(int)Math.round( Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)) )
+
+Most of the instances will have, "EDGE_WEIGHT_TYPE : EUC_2D", which simply means that the distance function is as I just described.  Unless you have spare time, only use the instances that have that edge weight type.
+
+Program Input Requirements:
+
+Implement your program, such that it can be run from the command line, including the ability to specify the TSP instance at the command line (as the first command line parameter).  You might also consider having additional command line parameters to control how long the local search or genetic algorithm runs.  If so, make sure you let me know what those parameters are.
+
+Here is an example of how I want your program to run (if you use Java):
+
+java NameOfClassWithMainMethod dj38.tsp
+
+The above example would be how you'd run your program if you wanted to solve the instance dj38.tsp.
+
+The equivalent for Python from a command prompt:
+
+python NameOfYourPythonModule.py dj38.tsp
+
+The above example assumes that the python executable is in your path.  If it is not, then either add it to your path, or you'll need to use the full path to the python executable, such as with:
+
+C:\Location\Of\Python\Executable\python.exe NameOfYourPythonModule.py dj38.tsp
+
+Both the Java and Python examples above assume that your present working directory contains your Java/Python program as well as the tsp file.  You'll need to include the paths otherwise.
+
+If you haven't used command line arguments before, here is how you access them in Java.  Assuming the example above, then in Java, the parameter to main method, which is an array of Strings will contain the command line arguments.  So if your main method looks like: public static void main(String[] args), then arg[0] will contain the name of whatever file was on the command line when you executed your program, which in the example above would be"dj38.tsp".  In Python, import sys, and then the command line arguments will be in sys.argv.  The name of the python module will be in argv[0], and then the actual command line arguments start in position 1, so argv[1] in the example above will be "dj38.tsp".
+
+
+Program Output Requirements:
+Implement your program so that it's output is as follows:
+
+First Line: Tour Cost (i.e., sum of distances of tour) on the first line of output only.  Just the integer value (nothing else, including no labels).
+
+Follow that first line with the list of city indices separated by any space characters you choose (spaces, tabs, new lines, etc).
+Please have nothing else in your output.
+
+Note: be careful with indices.  Arrays are obviously indexed beginning at 0.  However, the city indices in the instances begin at 1.  Make sure your output corresponds to the indices in the instance files.
