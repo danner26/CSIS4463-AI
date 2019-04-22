@@ -1,3 +1,6 @@
+###
+### @author Daniel @. Anner and Sam Isidoro
+###
 from random import shuffle, randint, random
 from math import sqrt, exp
 import sys
