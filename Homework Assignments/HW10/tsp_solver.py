@@ -1,5 +1,5 @@
 ###
-### @author Daniel @. Anner and Sam Isidoro
+### @author Daniel W. Anner and Sam Isidoro
 ###
 from random import shuffle, randint, random
 from math import sqrt, exp
